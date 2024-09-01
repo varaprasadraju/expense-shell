@@ -30,11 +30,6 @@ VALIDATE(){
     fi
 }
 
-USAGE(){
-    echo -e "$R USAGE:: $N sudo sh 16-redirectors.sh package1 package2 ..."
-    exit 1
-}
-
 echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 
 CHECK_ROOT
@@ -57,3 +52,8 @@ then
 else
     echo -e "MySQL root password is already setup...$Y SKIPPING $N" | tee -a $LOG_FILE
 fi
+
+
+# Assignment
+# check MySQL Server is installed or not, enabled or not, started or not
+# implement the above things
