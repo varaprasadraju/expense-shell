@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LOGS_FOLDER="/var/log/shell-script"
+LOGS_FOLDER="/var/log/expense"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 TIMESTAMP=$(date +%Y-%m-%d-%H-%M-%S)
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME-$TIMESTAMP.log"
@@ -34,25 +34,24 @@ echo "Script started executing at: $(date)" | tee -a $LOG_FILE
 
 CHECK_ROOT
 
-dnf install mysql -y &>>$LOG_FILE   # to instal mysql
-VALIDATE $? "Installing Mysql"
+dnf install mysql-server -y &>>$LOG_FILE
+VALIDATE $? "Installing MySQL Server"
 
-systemctl enable mysqld &>>$LOG_FILE    # to enable mysql
+systemctl enable mysqld &>>$LOG_FILE
 VALIDATE $? "Enabled MySQL Server"
 
-systemctl start mysqld &>>$LOG_FILE # to start my sql
+systemctl start mysqld &>>$LOG_FILE
 VALIDATE $? "Started MySQL server"
 
-mysql -h 172.31.43.71 -u root -pExpenseApp@1 -e 'show databases;' &>>$LOG_FILE  # to validate my sql password
+mysql -h mysql.daws81s.online -u root -pExpenseApp@1 -e 'show databases;' &>>$LOG_FILE
 if [ $? -ne 0 ]
 then
-    echo "MySQL root password is not setup, setting now" &>>$LOG_FILE   
-    mysql_secure_installation --set-root-pass ExpenseApp@1  # to setup my sql password
+    echo "MySQL root password is not setup, setting now" &>>$LOG_FILE
+    mysql_secure_installation --set-root-pass ExpenseApp@1
     VALIDATE $? "Setting UP root password"
 else
     echo -e "MySQL root password is already setup...$Y SKIPPING $N" | tee -a $LOG_FILE
 fi
-
 
 # Assignment
 # check MySQL Server is installed or not, enabled or not, started or not
